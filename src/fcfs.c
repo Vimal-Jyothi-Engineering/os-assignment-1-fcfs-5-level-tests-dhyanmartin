@@ -7,12 +7,11 @@ struct Process {
     int bt;
     int wt;
     int tat;
-    int ct;
 };
 
 int main() {
     int n;
-    if (scanf("%d", &n) != 1 || n <= 0) return 0;
+    if (scanf("%d", &n) != 1) return 0;
 
     struct Process p[100];
 
@@ -31,7 +30,7 @@ int main() {
     }
 
     int currentTime = 0;
-    double totalWT = 0, totalTAT = 0;
+    float totalWT = 0, totalTAT = 0;
 
     for (int i = 0; i < n; i++) {
         if (currentTime < p[i].at) {
@@ -41,7 +40,6 @@ int main() {
         p[i].wt = currentTime - p[i].at;
         p[i].tat = p[i].wt + p[i].bt;
         currentTime += p[i].bt;
-        p[i].ct = currentTime;
 
         totalWT += p[i].wt;
         totalTAT += p[i].tat;
