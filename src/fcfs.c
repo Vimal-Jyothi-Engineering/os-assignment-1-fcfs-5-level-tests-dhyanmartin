@@ -1,62 +1,46 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 int main() {
     int n;
     scanf("%d", &n);
 
-    int pid[100], at[100], bt[100];
+    if (n <= 0) return 0;
+
+    int at[100], bt[100];
     int wt[100], tat[100];
-    int ct[100];
-    int original_index[100];
 
     for (int i = 0; i < n; i++) {
         char pname[20];
         scanf("%s %d %d", pname, &at[i], &bt[i]);
-        pid[i] = atoi(pname + 1);
-        original_index[i] = i;
     }
 
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
-            if (at[j] > at[j + 1] || 
-               (at[j] == at[j + 1] && original_index[j] > original_index[j + 1])) {
-
+            if (at[j] > at[j + 1]) {
                 int t;
-
                 t = at[j]; at[j] = at[j + 1]; at[j + 1] = t;
                 t = bt[j]; bt[j] = bt[j + 1]; bt[j + 1] = t;
-                t = pid[j]; pid[j] = pid[j + 1]; pid[j + 1] = t;
-                t = original_index[j]; original_index[j] = original_index[j + 1]; original_index[j + 1] = t;
             }
         }
     }
 
-    int current_time = 0;
+    int current = 0;
 
     for (int i = 0; i < n; i++) {
-        if (current_time < at[i])
-            current_time = at[i];
+        if (current < at[i])
+            current = at[i];
 
-        ct[i] = current_time + bt[i];
-        tat[i] = ct[i] - at[i];
-        wt[i] = tat[i] - bt[i];
+        wt[i] = current - at[i];
+        tat[i] = wt[i] + bt[i];
 
-        current_time = ct[i];
-    }
-
-    int final_wt[100], final_tat[100];
-
-    for (int i = 0; i < n; i++) {
-        final_wt[original_index[i]] = wt[i];
-        final_tat[original_index[i]] = tat[i];
+        current += bt[i];
     }
 
     double avgWT = 0, avgTAT = 0;
 
     for (int i = 0; i < n; i++) {
-        avgWT += final_wt[i];
-        avgTAT += final_tat[i];
+        avgWT += wt[i];
+        avgTAT += tat[i];
     }
 
     avgWT /= n;
@@ -64,11 +48,11 @@ int main() {
 
     printf("Waiting Time:\n");
     for (int i = 0; i < n; i++)
-        printf("P%d %d\n", i + 1, final_wt[i]);
+        printf("%d\n", wt[i]);
 
     printf("Turnaround Time:\n");
     for (int i = 0; i < n; i++)
-        printf("P%d %d\n", i + 1, final_tat[i]);
+        printf("%d\n", tat[i]);
 
     printf("Average Waiting Time: %.2f\n", avgWT);
     printf("Average Turnaround Time: %.2f\n", avgTAT);
